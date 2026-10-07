@@ -1,0 +1,23 @@
+name: Teste de autenticação Azure
+
+on:
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  autenticar-azure:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Autenticar no Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Verificar acesso ao Azure
+        run: az account show
