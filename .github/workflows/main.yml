@@ -28,4 +28,7 @@ jobs:
         run: terraform init
 
       - name: Planejar Terraform
-        run: terraform plan
+        run: terraform plan 
+
+      - name: Aplicar Terraform
+        run: terraform apply -auto-approve
