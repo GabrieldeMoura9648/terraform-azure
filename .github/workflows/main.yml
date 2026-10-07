@@ -1,4 +1,4 @@
-name: Teste de autenticação Azure
+name: Terraform Azure
 
 on:
   workflow_dispatch:
@@ -7,17 +7,25 @@ permissions:
   id-token: write
   contents: read
 
+env:
+  ARM_USE_OIDC: true
+  ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+  ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+  ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
 jobs:
-  autenticar-azure:
+  terraform:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Autenticar no Azure
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      - name: Baixar código
+        uses: actions/checkout@v4
 
-      - name: Verificar acesso ao Azure
-        run: az account show
+      - name: Instalar Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Inicializar Terraform
+        run: terraform init
+
+      - name: Planejar Terraform
+        run: terraform plan
